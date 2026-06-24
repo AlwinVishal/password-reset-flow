@@ -99,7 +99,10 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const forgotPassword = asyncHandler(async (req, res) => {
 
+    console.log("Forgot password route hit");
+
     const { email } = req.body;
+    console.log("Email:", email);
 
     const user = await User.findOne({ email });
 
@@ -110,11 +113,15 @@ const forgotPassword = asyncHandler(async (req, res) => {
         throw error;
     }
 
+    console.log("User found");
+
     // user.resetPasswordToken = Math.random().toString(36).substring(2);
     const token = crypto.randomBytes(32).toString("hex");
     const resetPasswordExpires = Date.now() + 15 * 60 * 1000;
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+    console.log(resetUrl);
 
     user.resetPasswordToken = token;
     user.resetPasswordExpires = resetPasswordExpires;
@@ -141,7 +148,10 @@ const forgotPassword = asyncHandler(async (req, res) => {
         console.log("Email sent successfully");
     }
     catch (error) {
-        console.log("EMAIL ERROR:", error);
+        console.log("FULL ERROR:", error);
+        console.log("RESPONSE:", error.response);
+        console.log("DATA:", error.response?.data);
+
         throw error;
     }
 
