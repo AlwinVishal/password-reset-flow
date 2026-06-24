@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Password Reset Flow
 
 A full-stack Password Reset Flow application built using React, Node.js, Express, and MongoDB.
@@ -78,6 +77,3 @@ cd backend
 npm install
 npm start
 ```
-=======
-
->>>>>>> 4df03b0f3b9485e495422ade54cdbc3d2d55ec3f
