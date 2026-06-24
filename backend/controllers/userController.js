@@ -99,10 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const forgotPassword = asyncHandler(async (req, res) => {
 
-    console.log("Forgot password route hit");
-
     const { email } = req.body;
-    console.log("Email:", email);
 
     const user = await User.findOne({ email });
 
@@ -113,15 +110,11 @@ const forgotPassword = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    console.log("User found");
-
     // user.resetPasswordToken = Math.random().toString(36).substring(2);
     const token = crypto.randomBytes(32).toString("hex");
     const resetPasswordExpires = Date.now() + 15 * 60 * 1000;
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-
-    console.log(resetUrl);
 
     user.resetPasswordToken = token;
     user.resetPasswordExpires = resetPasswordExpires;
@@ -134,43 +127,28 @@ const forgotPassword = asyncHandler(async (req, res) => {
     console.log("Reset URL:", resetUrl);
 
     try {
-        // await sendEmail({
-        //     to: user.email,
-        //     subject: "Password Reset Request",
-        //     message: `
-        //     <h2>You requested a password reset</h2>
-        //     <p>Click below to reset your password</p>
-        //     <a href="${resetUrl}" target="_blank">Reset Password</a>
-        //     <p>This link will expire soon</p>
-        //     `
-        // });
+        await sendEmail({
+            to: user.email,
+            subject: "Password Reset Request",
+            message: `
+            <h2>You requested a password reset</h2>
+            <p>Click below to reset your password</p>
+            <a href="${resetUrl}" target="_blank">Reset Password</a>
+            <p>This link will expire soon</p>
+            `
+        });
 
-        // console.log("Email sent successfully");
-
-        console.log("Pretending email was sent");
-
-        // res.status(200).json({
-        //     success: true,
-        //     message: "Email skipped"
-        // });
+        console.log("Email sent successfully");
     }
     catch (error) {
-        console.log("FULL ERROR:", error);
-        console.log("RESPONSE:", error.response);
-        console.log("DATA:", error.response?.data);
-
+        console.log("EMAIL ERROR:", error);
         throw error;
     }
 
     res.status(200).json({
         success: true,
-        message: "Email skipped"
+        message: "Password reset email sent"
     });
-
-    // res.status(200).json({
-    //     success: true,
-    //     message: "Password reset email sent"
-    // });
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
