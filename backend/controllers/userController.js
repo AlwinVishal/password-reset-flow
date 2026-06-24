@@ -134,18 +134,25 @@ const forgotPassword = asyncHandler(async (req, res) => {
     console.log("Reset URL:", resetUrl);
 
     try {
-        await sendEmail({
-            to: user.email,
-            subject: "Password Reset Request",
-            message: `
-            <h2>You requested a password reset</h2>
-            <p>Click below to reset your password</p>
-            <a href="${resetUrl}" target="_blank">Reset Password</a>
-            <p>This link will expire soon</p>
-            `
-        });
+        // await sendEmail({
+        //     to: user.email,
+        //     subject: "Password Reset Request",
+        //     message: `
+        //     <h2>You requested a password reset</h2>
+        //     <p>Click below to reset your password</p>
+        //     <a href="${resetUrl}" target="_blank">Reset Password</a>
+        //     <p>This link will expire soon</p>
+        //     `
+        // });
 
-        console.log("Email sent successfully");
+        // console.log("Email sent successfully");
+
+        console.log("Pretending email was sent");
+
+        // res.status(200).json({
+        //     success: true,
+        //     message: "Email skipped"
+        // });
     }
     catch (error) {
         console.log("FULL ERROR:", error);
@@ -157,8 +164,13 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     res.status(200).json({
         success: true,
-        message: "Password reset email sent"
+        message: "Email skipped"
     });
+
+    // res.status(200).json({
+    //     success: true,
+    //     message: "Password reset email sent"
+    // });
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
