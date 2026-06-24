@@ -121,16 +121,29 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     await user.save();
 
-    await sendEmail({
-        to: user.email,
-        subject: "Password Reset Request",
-        message: `
-        <h2>You requested a password reset</h2>
-        <p>Click below to reset your password</p>
-        <a href ="${resetUrl}" target="_blank">Reset Password</a>
-        <p>This link will expire soon</p>
-        `
-    })
+    console.log("User found:", user.email);
+    console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("Reset URL:", resetUrl);
+
+    try {
+        await sendEmail({
+            to: user.email,
+            subject: "Password Reset Request",
+            message: `
+            <h2>You requested a password reset</h2>
+            <p>Click below to reset your password</p>
+            <a href="${resetUrl}" target="_blank">Reset Password</a>
+            <p>This link will expire soon</p>
+            `
+        });
+
+        console.log("Email sent successfully");
+    }
+    catch (error) {
+        console.log("EMAIL ERROR:", error);
+        throw error;
+    }
 
     res.status(200).json({
         success: true,

@@ -37,6 +37,7 @@ function Login() {
             setError(error.response.data.message);
         }
     }
+    
     return (
         <div
             className='min-h-screen flex justify-center items-center bg-gray-200'
